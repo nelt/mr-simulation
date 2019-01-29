@@ -13,6 +13,7 @@
     <url>https://github.com/nelt/mr-simulation</url>
 
     <modules>
+        <module>mr-simulation-app</module>
     </modules>
 
     <licenses>
