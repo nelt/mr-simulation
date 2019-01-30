@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class ReducerTest {
 
     @Test
-    public void given__when__then() throws Exception {
+    public void someReduction() throws Exception {
         Reducer reducer;
         try(Reader reduceFunctionReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("reduce.js"))) {
             reducer = new Reducer(reduceFunctionReader);

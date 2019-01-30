@@ -31,7 +31,7 @@ public class DataSet implements AutoCloseable {
         this.in.close();
     }
 
-    public Optional<Map<String, Object>> next() throws IOException {
+    public synchronized Optional<Map<String, Object>> next() throws IOException {
         if(this.jsonParser.nextToken() == JsonToken.START_OBJECT) {
             return Optional.of(this.mapper.readValue(this.jsonParser, Map.class));
         }
