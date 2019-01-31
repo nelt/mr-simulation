@@ -1,6 +1,7 @@
 package org.codingmatters.mr.simulation.exec;
 
 import org.codingmatters.mr.simulation.exec.exceptions.MapReduceException;
+import org.codingmatters.mr.simulation.io.FunctionSupplier;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -8,13 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class MapReduceExecutor implements AutoCloseable {
 
     private DataSet data;
     private final ExecutorService pool = Executors.newFixedThreadPool(2);
-    private final Reader mapFunctionReader;
-    private final Reader reduceFunctionReader;
+    private final FunctionSupplier mapFunctionReader;
+    private final FunctionSupplier reduceFunctionReader;
 
     public MapReduceExecutor(MapReduceConfig mapReduceConfig) {
         this.data = mapReduceConfig.getData();

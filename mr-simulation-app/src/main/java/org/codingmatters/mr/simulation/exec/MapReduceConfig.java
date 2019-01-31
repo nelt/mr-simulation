@@ -1,13 +1,13 @@
 package org.codingmatters.mr.simulation.exec;
 
-import java.io.Reader;
+import org.codingmatters.mr.simulation.io.FunctionSupplier;
 
 public class MapReduceConfig {
     private final DataSet data;
-    private final Reader map;
-    private final Reader reduce;
+    private final FunctionSupplier map;
+    private final FunctionSupplier reduce;
 
-    public MapReduceConfig(DataSet data, Reader map, Reader reduce) {
+    public MapReduceConfig(DataSet data, FunctionSupplier map, FunctionSupplier reduce) {
         this.data = data;
         this.map = map;
         this.reduce = reduce;
@@ -17,11 +17,11 @@ public class MapReduceConfig {
         return data;
     }
 
-    public Reader getMap() {
+    public FunctionSupplier getMap() {
         return map;
     }
 
-    public Reader getReduce() {
+    public FunctionSupplier getReduce() {
         return reduce;
     }
 }

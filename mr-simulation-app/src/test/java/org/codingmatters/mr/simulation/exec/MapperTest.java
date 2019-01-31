@@ -16,10 +16,7 @@ public class MapperTest {
 
     @Test
     public void singleMap() throws Exception {
-        Mapper mapper;
-        try(Reader mapFunctionReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("map.js"))) {
-            mapper = new Mapper(mapFunctionReader);
-        }
+        Mapper mapper = new Mapper(() -> new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("map.js")));
 
         Map<String, Object> datum = new HashMap<>();
         datum.put("title", "yop !");

@@ -17,10 +17,7 @@ public class ReducerTest {
 
     @Test
     public void someReduction() throws Exception {
-        Reducer reducer;
-        try(Reader reduceFunctionReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("reduce.js"))) {
-            reducer = new Reducer(reduceFunctionReader);
-        }
+        Reducer reducer = new Reducer(() -> new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("reduce.js")));
 
         List<Map<String, Object>> values = new LinkedList<>();
         for (int i = 0; i < 10; i++) {

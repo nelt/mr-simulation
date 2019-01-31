@@ -10,6 +10,7 @@ public class Emitter {
     public void emit(String key, ScriptObjectMirror value) {
         this.emitted.computeIfAbsent(key, s -> new LinkedList<>());
         this.emitted.get(key).add(value);
+        this.listeners.forEach(listener -> listener.emitted(key, value));
     }
 
     public Set<String> emittedKeys() {
@@ -35,5 +36,10 @@ public class Emitter {
         return "Emitter{" +
                 "emitted=" + emitted +
                 '}';
+    }
+
+    private final HashSet<MapperListener> listeners = new HashSet<>();
+    public void register(MapperListener listener) {
+        this.listeners.add(listener);
     }
 }

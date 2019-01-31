@@ -3,15 +3,18 @@ package org.codingmatters.mr.simulation.exec;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.codingmatters.mr.simulation.exec.exceptions.MapperException;
 import org.codingmatters.mr.simulation.exec.exceptions.ReducerException;
+import org.codingmatters.mr.simulation.io.FunctionSupplier;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class Reducer {
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
@@ -20,10 +23,10 @@ public class Reducer {
     private final Emitter emitter = new Emitter();
 
 
-    public Reducer(Reader reduceFunctionReader) throws ReducerException {
-        try {
-            this.engine.eval(reduceFunctionReader, this.bindings);
-        } catch (ScriptException e) {
+    public Reducer(FunctionSupplier reduceFunctionReader) throws ReducerException {
+        try (Reader reader = reduceFunctionReader.get()) {
+            this.engine.eval(reader, this.bindings);
+        } catch (ScriptException | IOException e) {
             throw new ReducerException("error parsing reduce function", e);
         }
     }

@@ -5,10 +5,7 @@ import org.codingmatters.mr.simulation.exec.MapReduceConfig;
 import org.codingmatters.mr.simulation.exec.MapReduceExecutor;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConsoleApp {
 
@@ -42,14 +39,12 @@ public class ConsoleApp {
 
         try(
                 InputStream dataSetInput = new FileInputStream(namedParams.get("data-set"));
-                DataSet dataSet = new DataSet(dataSetInput);
-                Reader mapReader = new FileReader(namedParams.get("map"));
-                Reader reduceReader = new FileReader(namedParams.get("reduce"));
+                DataSet dataSet = new DataSet(dataSetInput)
         ) {
             MapReduceConfig config = new MapReduceConfig(
                     dataSet,
-                    mapReader,
-                    reduceReader
+                    () -> new FileReader(namedParams.get("map")),
+                    () -> new FileReader(namedParams.get("reduce"))
             );
 
             try(MapReduceExecutor mapReduceExecutor = new MapReduceExecutor(config)) {
@@ -59,7 +54,10 @@ public class ConsoleApp {
             throw new RuntimeException("failed executing M/R algorithm", e);
         }
 
-        for (String key : result.keySet()) {
+        List<String> sortedKeys = new LinkedList<>(result.keySet());
+        Collections.sort(sortedKeys);
+
+        for (String key : sortedKeys) {
             System.out.printf("%s :: %s\n", key, result.get(key));
         }
 
