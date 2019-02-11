@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -22,6 +23,8 @@ public class ExecutionContext {
         bindings.put("dateSecond", (Function<String, Integer>) (str) -> dateField(ChronoField.SECOND_OF_MINUTE, str));
 
         bindings.put("dateFormat", (BiFunction<String, String, String>) (str, format) -> dateFormat(str, format));
+
+        bindings.put("words", (Function<String, String[]>) (str) -> words(str));
     }
 
     static public int dateField(ChronoField field, String dateString) {
@@ -45,5 +48,13 @@ public class ExecutionContext {
 
     private static LocalDateTime parseDate(String dateString) {
         return LocalDateTime.parse(dateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    }
+
+    static public String[] words(String str) {
+        if(str == null) {
+            return new String[0];
+        } else {
+            return str.split("[\\s\\p{Punct}]+");
+        }
     }
 }
