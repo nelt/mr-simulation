@@ -23,6 +23,7 @@ public class Mapper {
 
     public Mapper(FunctionSupplier mapFunctionReader) throws MapperException {
         try(Reader reader = mapFunctionReader.get()) {
+            ExecutionContext.setup(this.bindings);
             this.bindings.put("emitter", this.emitter);
             this.engine.eval("function emit(key, value) {emitter.emit(key, value); }", this.bindings);
             this.engine.eval(reader, this.bindings);

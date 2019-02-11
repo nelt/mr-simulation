@@ -1,6 +1,7 @@
 package org.codingmatters.mr.simulation.exec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.codingmatters.mr.simulation.exec.data.set.StreamDataSet;
 import org.codingmatters.mr.simulation.io.FunctionSupplier;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +36,7 @@ public class MapReduceExecutorTest {
 
     @Test
     public void testDataSet() throws Exception {
-        try(DataSet data = new DataSet(new FileInputStream(this.dataSetFile))) {
+        try(StreamDataSet data = new StreamDataSet(new FileInputStream(this.dataSetFile))) {
             for (int i = 0; i < 200; i++) {
                 Map<String, Object> datum = new HashMap<>();
                 datum.put("title", "the " + i);
@@ -50,7 +51,7 @@ public class MapReduceExecutorTest {
         FunctionSupplier map = () -> new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("map.js"));
         FunctionSupplier reduce = () -> new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("reduce.js"));
         try(
-                DataSet data = new DataSet(new FileInputStream(this.dataSetFile));
+                StreamDataSet data = new StreamDataSet(new FileInputStream(this.dataSetFile));
                 MapReduceExecutor executor = new MapReduceExecutor(new MapReduceConfig(data, map, reduce))
         ) {
             Map<String, Map<String, Object>> result = executor.execute().get();

@@ -20,11 +20,9 @@ public class Reducer {
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
     private final Bindings bindings = engine.createBindings();
 
-    private final Emitter emitter = new Emitter();
-
-
     public Reducer(FunctionSupplier reduceFunctionReader) throws ReducerException {
         try (Reader reader = reduceFunctionReader.get()) {
+            ExecutionContext.setup(this.bindings);
             this.engine.eval(reader, this.bindings);
         } catch (ScriptException | IOException e) {
             throw new ReducerException("error parsing reduce function", e);

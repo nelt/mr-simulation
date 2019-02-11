@@ -1,8 +1,8 @@
 package org.codingmatters.mr.simulation.app;
 
-import org.codingmatters.mr.simulation.exec.DataSet;
 import org.codingmatters.mr.simulation.exec.MapReduceConfig;
 import org.codingmatters.mr.simulation.exec.MapReduceExecutor;
+import org.codingmatters.mr.simulation.exec.data.set.StreamDataSet;
 
 import java.io.*;
 import java.util.*;
@@ -39,7 +39,7 @@ public class ConsoleApp {
 
         try(
                 InputStream dataSetInput = new FileInputStream(namedParams.get("data-set"));
-                DataSet dataSet = new DataSet(dataSetInput)
+                StreamDataSet dataSet = new StreamDataSet(dataSetInput)
         ) {
             MapReduceConfig config = new MapReduceConfig(
                     dataSet,

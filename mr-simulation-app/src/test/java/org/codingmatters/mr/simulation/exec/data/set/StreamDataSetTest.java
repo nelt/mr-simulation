@@ -1,4 +1,4 @@
-package org.codingmatters.mr.simulation.exec;
+package org.codingmatters.mr.simulation.exec.data.set;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -11,18 +11,18 @@ import java.util.Map;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-public class DataSetTest {
+public class StreamDataSetTest {
 
     @Test
     public void empty() throws Exception {
-        try(DataSet dataSet = new DataSet(this.resourceStream("data-set/empty.json"))) {
+        try(StreamDataSet dataSet = new StreamDataSet(this.resourceStream("data-set/empty.json"))) {
             assertFalse(dataSet.next().isPresent());
         }
     }
 
     @Test
     public void oneElement() throws Exception {
-        try(DataSet dataSet = new DataSet(this.resourceStream("data-set/one-element.json"))) {
+        try(StreamDataSet dataSet = new StreamDataSet(this.resourceStream("data-set/one-element.json"))) {
             assertThat(dataSet.next().get(), is(map().put("str", "hello").put("num", 12)));
             assertFalse(dataSet.next().isPresent());
         }
@@ -30,7 +30,7 @@ public class DataSetTest {
 
     @Test
     public void manyElement() throws Exception {
-        try(DataSet dataSet = new DataSet(this.resourceStream("data-set/many-elements.json"))) {
+        try(StreamDataSet dataSet = new StreamDataSet(this.resourceStream("data-set/many-elements.json"))) {
             assertTrue(dataSet.next().isPresent());
             assertTrue(dataSet.next().isPresent());
             assertTrue(dataSet.next().isPresent());
@@ -43,7 +43,7 @@ public class DataSetTest {
 
     @Test
     public void relaxSyntax() throws Exception {
-        try(DataSet dataSet = new DataSet(this.resourceStream("data-set/relaxed-syntax.json"))) {
+        try(StreamDataSet dataSet = new StreamDataSet(this.resourceStream("data-set/relaxed-syntax.json"))) {
             assertThat(dataSet.next().get(), is(map().put("str", "hello").put("num", 12)));
             assertFalse(dataSet.next().isPresent());
         }
