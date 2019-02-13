@@ -58,8 +58,12 @@ public class ConsoleApp {
         Collections.sort(sortedKeys);
 
         for (String key : sortedKeys) {
-            System.out.printf("%s :: %s\n", key, result.get(key));
+            System.out.printf("%s :: %s\n", key, objectToString(result.get(key)));
         }
 
+    }
+
+    private static Object objectToString(Map<String, Object> map) {
+        return map.toString();
     }
 }
