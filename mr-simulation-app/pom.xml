@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.codingmatters.mr</groupId>
         <artifactId>mr-simulation</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>mr-simulation-app</artifactId>
@@ -44,6 +44,8 @@
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
+                            <finalName>mr</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
