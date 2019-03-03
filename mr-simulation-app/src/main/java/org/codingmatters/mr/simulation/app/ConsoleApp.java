@@ -35,6 +35,17 @@ public class ConsoleApp {
             throw new RuntimeException("missing map script (--data-set)");
         }
 
+
+        int mapperCount = 4;
+        if(namedParams.containsKey("mapper-count")) {
+            try {
+                mapperCount = Integer.parseInt(namedParams.get("mapper-count"));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("--mapper-count must specify an integer value, was " + namedParams.get("mapper-count"), e);
+            }
+        }
+
+
         Map<String, Map<String, Object>> result;
 
         try(
@@ -44,8 +55,8 @@ public class ConsoleApp {
             MapReduceConfig config = new MapReduceConfig(
                     dataSet,
                     () -> new FileReader(namedParams.get("map")),
-                    () -> new FileReader(namedParams.get("reduce"))
-            );
+                    () -> new FileReader(namedParams.get("reduce")),
+                    mapperCount);
 
             try(MapReduceExecutor mapReduceExecutor = new MapReduceExecutor(config)) {
                 result = mapReduceExecutor.execute().get();
