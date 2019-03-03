@@ -47,7 +47,7 @@ public class ConsoleApp {
 
 
         Map<String, Map<String, Object>> result;
-
+        long elapsed;
         try(
                 InputStream dataSetInput = new FileInputStream(namedParams.get("data-set"));
                 StreamDataSet dataSet = new StreamDataSet(dataSetInput)
@@ -59,7 +59,9 @@ public class ConsoleApp {
                     mapperCount);
 
             try(MapReduceExecutor mapReduceExecutor = new MapReduceExecutor(config)) {
+                long start = System.currentTimeMillis();
                 result = mapReduceExecutor.execute().get();
+                elapsed = System.currentTimeMillis() - start;
             }
         } catch (Exception e) {
             throw new RuntimeException("failed executing M/R algorithm", e);
@@ -72,6 +74,9 @@ public class ConsoleApp {
             System.out.printf("%s :: %s\n", key, objectToString(result.get(key)));
         }
 
+        System.out.printf("\n#############################################################\n");
+        System.out.printf("Map/Reduce ran in %d ms using %d mappers\n", elapsed, mapperCount);
+        System.out.printf("#############################################################\n");
     }
 
     private static Object objectToString(Map<String, Object> map) {
