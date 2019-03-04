@@ -1,5 +1,6 @@
 package org.codingmatters.mr.simulation.exec;
 
+import org.codingmatters.mr.simulation.exec.concentrator.Concentrator;
 import org.codingmatters.mr.simulation.exec.data.set.StreamDataSet;
 import org.codingmatters.mr.simulation.exec.exceptions.MapReduceException;
 import org.codingmatters.mr.simulation.exec.exceptions.MapperException;
@@ -7,6 +8,8 @@ import org.codingmatters.mr.simulation.io.FunctionSupplier;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 public class MapReduceExecutor implements AutoCloseable {
 
@@ -31,28 +34,33 @@ public class MapReduceExecutor implements AutoCloseable {
     }
 
     private Map<String, Map<String, Object>> doExecute() throws MapReduceException {
-        Map<String, List<Map<String, Object>>> emittedValues = this.executeMapPhase();
+        AtomicReference<Map<String, Map<String, Object>>> result = new AtomicReference<>(new HashMap<>());
+        Concentrator concentrator = new Concentrator(
+                concentrated -> {
+                    for (String key : concentrated.keySet()) {
+                        Map<String, Object> reduced = null;
+                        try {
+                            reduced = this.reducer(concentrated.get(key)).call();
+                        } catch (Exception e) {
+                            throw new MapReduceException("error in reduce phase", e);
+                        }
+                        result.get().put(key, reduced);
+                    }
+                },
+                this.config.getMapperCount()
+        );
 
-        Map<String, Map<String, Object>> result = new HashMap<>();
-        for (String key : emittedValues.keySet()) {
-            Map<String, Object> reduced = null;
-            try {
-                reduced = this.pool.submit(this.reducer(emittedValues.get(key))).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new MapReduceException("error in reduce phase", e);
-            }
-            result.put(key, reduced);
-        }
+        this.executeMapPhase(concentrator);
 
-        return result;
+        return result.get();
     }
 
-    private Map<String, List<Map<String, Object>>> executeMapPhase() throws MapReduceException {
+    private void executeMapPhase(Concentrator concentrator) throws MapReduceException {
         List<Callable<Map<String, List<Map<String, Object>>>>> mappers = new ArrayList<>(this.config.getMapperCount());
 
         for (int i = 0; i < this.config.getMapperCount(); i++) {
             try {
-                mappers.add(this.mapper());
+                mappers.add(this.mapper(concentrator));
             } catch (MapperException e) {
                 throw new MapReduceException("error initializing mappers", e);
             }
@@ -65,25 +73,16 @@ public class MapReduceExecutor implements AutoCloseable {
             throw new MapReduceException("error invoking map phase", e);
         }
 
-        Map<String, List<Map<String, Object>>> emittedValues = new HashMap<>();
-        for (Future<Map<String, List<Map<String, Object>>>> mapperResult : mapperResults) {
+        for (Future<Map<String, List<Map<String, Object>>>> mapFuture : mapperResults) {
             try {
-                Map<String, List<Map<String, Object>>> emitted = mapperResult.get();
-                for (String key : emitted.keySet()) {
-                    if(! emittedValues.containsKey(key)) {
-                        emittedValues.put(key, new LinkedList<>());
-                    }
-                    emittedValues.get(key).addAll(emitted.get(key));
-                }
+                mapFuture.get();
             } catch (InterruptedException | ExecutionException e) {
-                throw new MapReduceException("error collecting emitted values", e);
+                throw new MapReduceException("error mapping values", e);
             }
         }
-
-        return emittedValues;
     }
 
-    private Callable<Map<String, List<Map<String, Object>>>> mapper() throws MapperException {
+    private Callable<Map<String, List<Map<String, Object>>>> mapper(Concentrator concentrator) throws MapperException {
         Mapper mapper = new Mapper(this.mapFunctionReader);
         return () -> {
 
@@ -96,6 +95,7 @@ public class MapReduceExecutor implements AutoCloseable {
                 result.put(emittedKey, mapper.emittedFor(emittedKey));
             }
 
+            concentrator.take(result);
             return result;
         };
     }
