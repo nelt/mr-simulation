@@ -6,7 +6,7 @@
 
     <groupId>org.codingmatters.mr</groupId>
     <artifactId>mr-simulation</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
     <name>M/R Simulation</name>

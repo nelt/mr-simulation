@@ -39,7 +39,7 @@ public class Reducer {
             }
             return result;
         } catch (ScriptException e) {
-            throw new ReducerException("error reducing value set : " + values, e);
+            throw new ReducerException("error reducing value set : " + this.bindings.get("values"), e);
         }
     }
 }
