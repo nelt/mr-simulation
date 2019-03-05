@@ -24,7 +24,7 @@ public class Concentrator {
         this.sourceCount = sourceCount;
     }
 
-    public Concentrator take(Map<String, List<Map<String, Object>>> values) throws MapReduceException {
+    public synchronized Concentrator take(Map<String, List<Map<String, Object>>> values) throws MapReduceException {
         if(this.takeCount >= this.sourceCount) {
             throw new IllegalStateException("concentrator is already consumed, should not be called more then source count (" + this.sourceCount +")");
         }

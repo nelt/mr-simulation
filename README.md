@@ -3,14 +3,19 @@
 This a simple tool to run map / reduce algorithm by providing :
 * map and reduce functions in the Javascript language (see below for the specification of the flavor of JS tu use)
 * a data set in the form of a file, one entry per line, each entry being a json object
+* one can define the number of mapper to use and the number of reduce phase, thus simulating map / reduce distribution 
+topology.
 
 ## Usage 
 
 Pick up the last release all in one jar (on the release page), then execute :
 
 ```
-java -jar mr-1.0.1.jar --map map.js --reduce reduce.js --data-set data-set.json
+java -jar mr-1.0.2.jar --map map.js --reduce reduce.js --data-set data-set.json
 ```
+This executes the algorithm using the defaults : 4 mappers and 2 reduce phases. 
+
+### Defining the number of mappers
 
 You can set the number of mappers with the --mapper-count option (the default value is 4). Here's an example with 10 concurrent mappers :
 
@@ -19,6 +24,13 @@ You can set the number of mappers with the --mapper-count option (the default va
 java -jar mr-1.0.1.jar --mapper-count 10 --map map.js --reduce reduce.js --data-set data-set.json
 ```
 
+### Defining the number of mappers
+
+You can set the number of reduce phases with the --reduce-phases option. Here's an example with 10 concurrent mappers and 4 reduce phases :
+
+```
+java -jar mr-1.0.1.jar --mapper-count 10 --reduce-phases 4 --map map.js --reduce reduce.js --data-set data-set.json
+```
 
 ## Map and Reduce functions syntax
 

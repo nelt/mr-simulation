@@ -45,6 +45,19 @@ public class ConsoleApp {
             }
         }
 
+        int reducePhaseCount = 2;
+        if(namedParams.containsKey("reduce-phases")) {
+            try {
+                reducePhaseCount = Integer.parseInt(namedParams.get("reduce-phases"));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("--reduce-phases must specify an integer value, was " + namedParams.get("reduce-phases"), e);
+            }
+        }
+
+        if(reducePhaseCount > mapperCount) {
+            throw new RuntimeException("reduce phase cannot be greater then mapper count");
+        }
+
 
         Map<String, Map<String, Object>> result;
         long elapsed;
@@ -56,7 +69,7 @@ public class ConsoleApp {
                     dataSet,
                     () -> new FileReader(namedParams.get("map")),
                     () -> new FileReader(namedParams.get("reduce")),
-                    mapperCount);
+                    mapperCount, reducePhaseCount);
 
             try(MapReduceExecutor mapReduceExecutor = new MapReduceExecutor(config)) {
                 long start = System.currentTimeMillis();
@@ -74,9 +87,9 @@ public class ConsoleApp {
             System.out.printf("%s :: %s\n", key, objectToString(result.get(key)));
         }
 
-        System.out.printf("\n#############################################################\n");
-        System.out.printf("Map/Reduce ran in %d ms using %d mappers\n", elapsed, mapperCount);
-        System.out.printf("#############################################################\n");
+        System.out.printf("\n###################################################################\n");
+        System.out.printf("# Map/Reduce ran in %d ms using %d mappers and %d reduce phases\n", elapsed, mapperCount, reducePhaseCount);
+        System.out.printf("###################################################################\n");
     }
 
     private static Object objectToString(Map<String, Object> map) {
