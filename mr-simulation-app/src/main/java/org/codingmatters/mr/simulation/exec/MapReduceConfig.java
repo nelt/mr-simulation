@@ -8,12 +8,18 @@ public class MapReduceConfig {
     private final FunctionSupplier map;
     private final FunctionSupplier reduce;
     private final int mapperCount;
+    private int reducePhaseCount;
 
-    public MapReduceConfig(StreamDataSet data, FunctionSupplier map, FunctionSupplier reduce, int mapperCount) {
+    public MapReduceConfig(StreamDataSet data, FunctionSupplier map, FunctionSupplier reduce, int mapperCount, int reducePhaseCount) {
         this.data = data;
         this.map = map;
         this.reduce = reduce;
         this.mapperCount = mapperCount;
+        this.reducePhaseCount = reducePhaseCount;
+
+        if(this.reducePhaseCount > this.mapperCount) {
+            throw new IllegalArgumentException("mapper count must be greater than reduce phases");
+        }
     }
 
     public StreamDataSet getData() {
@@ -30,5 +36,9 @@ public class MapReduceConfig {
 
     public int getMapperCount() {
         return mapperCount;
+    }
+
+    public int getReducePhaseCount() {
+        return reducePhaseCount;
     }
 }
