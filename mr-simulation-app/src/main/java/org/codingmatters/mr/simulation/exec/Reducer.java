@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class Reducer {
-    private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+    private final ScriptEngine engine = EngineProvider.createEngine();
     private final Bindings bindings = engine.createBindings();
 
     public Reducer(FunctionSupplier reduceFunctionReader) throws ReducerException {

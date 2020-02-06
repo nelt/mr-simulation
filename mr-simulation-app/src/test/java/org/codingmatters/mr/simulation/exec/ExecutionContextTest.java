@@ -1,5 +1,6 @@
 package org.codingmatters.mr.simulation.exec;
 
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ public class ExecutionContextTest {
 
     @Test
     public void given__when__then() throws Exception {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        ScriptEngine engine = EngineProvider.createEngine();
         Bindings bindings = engine.createBindings();
 
 //        ExecutionContext.setup(engine);

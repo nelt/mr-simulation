@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class Mapper {
-    private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+    private final ScriptEngine engine = EngineProvider.createEngine();
     private final Bindings bindings = engine.createBindings();
 
     private final Emitter emitter = new Emitter();
