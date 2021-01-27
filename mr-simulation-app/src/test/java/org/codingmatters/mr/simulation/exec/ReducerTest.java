@@ -28,6 +28,6 @@ public class ReducerTest {
 
         Map<String, Object> result = reducer.reduce(values);
 
-        assertThat(result.get("cnt"), is(10.0));
+        assertThat(result.get("cnt"), is(10));
     }
 }

@@ -79,8 +79,8 @@ public class MapReduceExecutorTest {
 
             assertThat(result.size(), is(1));
             assertThat(result.get("key").size(), is(2));
-            assertThat(result.get("key").get("cnt"), is(200.0));
-            assertThat(result.get("key").get("avg"), is(12.0));
+            assertThat(result.get("key").get("cnt"), is(200));
+            assertThat(result.get("key").get("avg"), is(12));
         }
     }
 }
