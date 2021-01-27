@@ -12,6 +12,10 @@
     <name>M/R Simulation</name>
     <url>https://github.com/nelt/mr-simulation</url>
 
+    <properties>
+        <docker.image.namespace>codingmatters</docker.image.namespace>
+    </properties>
+
     <modules>
         <module>mr-simulation-app</module>
     </modules>

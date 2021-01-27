@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+
+  service:
+    build: .
+    image: ${docker.image.namespace}/${project.artifactId}:${project.version}
+
