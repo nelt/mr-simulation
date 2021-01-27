@@ -8,5 +8,5 @@ COPY mr.sh /usr/bin/mr
 RUN chmod a+x /usr/bin/mr
 
 WORKDIR /work
-CMD ["mr"]
+CMD echo "Usage : mr --map map.js --reduce reduce.js --data-set data-set.json"
 
