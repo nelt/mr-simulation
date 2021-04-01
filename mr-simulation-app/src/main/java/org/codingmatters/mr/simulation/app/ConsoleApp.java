@@ -1,5 +1,7 @@
 package org.codingmatters.mr.simulation.app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codingmatters.mr.simulation.exec.MapReduceConfig;
 import org.codingmatters.mr.simulation.exec.MapReduceExecutor;
 import org.codingmatters.mr.simulation.exec.data.set.StreamDataSet;
@@ -93,6 +95,11 @@ public class ConsoleApp {
     }
 
     private static Object objectToString(Map<String, Object> map) {
-        return map.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("failed formatting results");
+        }
     }
 }
