@@ -11,13 +11,13 @@ topology.
 The simplest way to execute the M/R simulation is to use the docker image. For instance :
 
 ```
-docker run --rm -it -v $PWD:/work  codingmatters/mr-simulation-app:1.0.2 mr --map map.js --reduce reduce.js --data-set data-set.json
+docker run --rm -it -v $PWD:/work  codingmatters/mr-simulation-app:1.0.3 mr --map map.js --reduce reduce.js --data-set data-set.json
 ```
 
 Or you can pick up the last release all in one jar (on the release page), then execute :
 
 ```
-java -jar mr-1.0.2.jar --map map.js --reduce reduce.js --data-set data-set.json
+java -jar mr-1.0.3.jar --map map.js --reduce reduce.js --data-set data-set.json
 ```
 This executes the algorithm using the defaults : 4 mappers and 2 reduce phases. 
 
@@ -27,7 +27,7 @@ You can set the number of mappers with the --mapper-count option (the default va
 
 
 ```
-java -jar mr-1.0.1.jar --mapper-count 10 --map map.js --reduce reduce.js --data-set data-set.json
+java -jar mr-1.0.3.jar --mapper-count 10 --map map.js --reduce reduce.js --data-set data-set.json
 ```
 
 ### Defining the number of mappers
@@ -35,7 +35,7 @@ java -jar mr-1.0.1.jar --mapper-count 10 --map map.js --reduce reduce.js --data-
 You can set the number of reduce phases with the --reduce-phases option. Here's an example with 10 concurrent mappers and 4 reduce phases :
 
 ```
-java -jar mr-1.0.1.jar --mapper-count 10 --reduce-phases 4 --map map.js --reduce reduce.js --data-set data-set.json
+java -jar mr-1.0.3.jar --mapper-count 10 --reduce-phases 4 --map map.js --reduce reduce.js --data-set data-set.json
 ```
 
 ## Map and Reduce functions syntax
